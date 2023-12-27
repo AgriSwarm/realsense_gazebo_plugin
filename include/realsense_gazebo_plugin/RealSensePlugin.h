@@ -17,6 +17,7 @@
 #ifndef _GZRS_PLUGIN_HH_
 #define _GZRS_PLUGIN_HH_
 
+#include <ros/ros.h>
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/common/common.hh>
 #include <gazebo/physics/PhysicsTypes.hh>

@@ -88,12 +88,20 @@ void RealSensePlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
     else if (name == "infrared2CameraInfoTopicName")
       cameraParamsMap_[IRED2_CAMERA_NAME].camera_info_topic_name =
           _sdf->GetValue()->GetAsString();
-    else if (name == "colorOpticalframeName")
-      cameraParamsMap_[COLOR_CAMERA_NAME].optical_frame =
-          _sdf->GetValue()->GetAsString();
-    else if (name == "depthOpticalframeName")
-      cameraParamsMap_[DEPTH_CAMERA_NAME].optical_frame =
-          _sdf->GetValue()->GetAsString();
+    else if (name == "colorOpticalframeName"){
+      std::string frame = _sdf->GetValue()->GetAsString();
+      if (frame.find("::") != std::string::npos){
+        frame = frame.substr(frame.find("::") + 2);
+      }
+      cameraParamsMap_[COLOR_CAMERA_NAME].optical_frame = frame;
+    }
+    else if (name == "depthOpticalframeName"){
+      std::string frame = _sdf->GetValue()->GetAsString();
+      if (frame.find("::") != std::string::npos){
+        frame = frame.substr(frame.find("::") + 2);
+      }
+      cameraParamsMap_[DEPTH_CAMERA_NAME].optical_frame = frame;
+    }
     else if (name == "infrared1OpticalframeName")
       cameraParamsMap_[IRED1_CAMERA_NAME].optical_frame =
           _sdf->GetValue()->GetAsString();
@@ -120,6 +128,7 @@ void RealSensePlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
       throw std::runtime_error("Ivalid parameter for ReakSensePlugin");
 
     _sdf = _sdf->GetNextElement();
+    // ROS_WARN_STREAM("value: " << _sdf->GetValue()->GetAsString());
   } while (_sdf);
 
   // Store a pointer to the this model
